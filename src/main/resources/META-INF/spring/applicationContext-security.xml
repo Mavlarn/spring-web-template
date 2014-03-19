@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <debug />
+
+    <global-method-security pre-post-annotations="enabled" />
+
+    <http pattern="/static/**" security="none"/>
+    <http pattern="/index.html" security="none"/>
+
+    <http use-expressions="true">
+
+        <intercept-url pattern="/secure/**"    access="hasRole('ADMIN') or hasRole('USER')" />
+        <intercept-url pattern="/operation/**"  access="hasRole('ADMIN')" />
+        <intercept-url pattern="/guahao/**"  access="hasRole('USER')" />
+        <intercept-url pattern="/intro/**"  access="permitAll" />
+
+        <!--
+             Allow all other requests. In a real application you should
+             adopt a whitelisting approach where access is not allowed by default
+          -->
+        <intercept-url pattern="/**" access="permitAll" />
+
+        <form-login login-page="/static/login.html" default-target-url='/secure/user-index.html'/>
+
+        <logout logout-success-url="/index.html" delete-cookies="JSESSIONID"/>
+        <remember-me key="myapp"/>
+
+        <!-- Uncomment to limit the number of sessions a user can have -->
+        <session-management invalid-session-url="/index.html">
+            <concurrency-control max-sessions="1" error-if-maximum-exceeded="true" />
+        </session-management>
+
+    </http>
+
+
+    <beans:bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+    </beans:bean>
+
+    <authentication-manager>
+        <authentication-provider user-service-ref="securityUserDetailsService">
+            <password-encoder ref="passwordEncoder"/>
+        </authentication-provider>
+    </authentication-manager>
+
+</beans:beans>
