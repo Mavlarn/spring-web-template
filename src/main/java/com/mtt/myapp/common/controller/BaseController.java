@@ -43,6 +43,7 @@ public class BaseController implements SystemConstants {
 	private static String successJson;
 	private static String errorJson;
 	private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().setPrettyPrinting().create();
+	private static Gson prettyGson = new GsonBuilder().setPrettyPrinting().create();
 
 	@Autowired
 	private MessageSource messageSource;
