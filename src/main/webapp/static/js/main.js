@@ -16,7 +16,7 @@ angular.module('guahao', ['ngAnimate', 'ui.router', 'guahao.services', 'guahao.c
       url: '/home',
       templateUrl: 'home/home.html'
     })
-    .state('home', {
+    .state('home.list', {
       url: '/home',
       templateUrl: 'home/list.html'
     })
